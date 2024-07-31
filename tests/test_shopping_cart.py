@@ -1,20 +1,14 @@
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.support.wait import WebDriverWait
+from pages.home_page import HomePage
+from pages.product_page import ProductPage
+from pages.shopping_cart_page import ShoppingCartPage
 
 
 def test_add_to_shopping_cart(browser):
-    browser.get(browser.url + "/")
-    product = WebDriverWait(browser, timeout=2).until(
-        EC.visibility_of_all_elements_located((By.CSS_SELECTOR, ".product-thumb"))
-    )[0]
-    product.click()
-    button = WebDriverWait(browser, timeout=2).until(
-        EC.visibility_of_element_located((By.CSS_SELECTOR, "button#button-cart"))
-    )
-    button.click()
-    WebDriverWait(browser, timeout=2).until(
-        EC.visibility_of_element_located(
-            (By.XPATH, '//button[contains(text(), "1 item(s)")]')
-        )
-    )
+    home_page = HomePage(browser)
+    shopping_cart_page = ShoppingCartPage(browser)
+    product_page = ProductPage(browser)
+    home_page.open_home_page()
+    home_page.click_on_product("MacBook")
+    product_page.add_to_shopping_cart()
+    shopping_cart_page.open_shopping_cart_page()
+    shopping_cart_page.have_product("MacBook")

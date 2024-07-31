@@ -1,129 +1,63 @@
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.support.wait import WebDriverWait
+from pages.admin_page import AdminPage
+from pages.catalog_page import CatalogPage
+from pages.home_page import HomePage
+from pages.registration_page import RegistrationPage
+from pages.shopping_cart_page import ShoppingCartPage
 
 
 def test_homepage(browser):
-    browser.get(browser.url + "/")
-    WebDriverWait(browser, timeout=2).until(
-        EC.visibility_of_element_located((By.CSS_SELECTOR, 'img[title="Your Store"]'))
-    )
-    WebDriverWait(browser, timeout=2).until(
-        EC.visibility_of_element_located((By.CSS_SELECTOR, "#menu"))
-    )
-    WebDriverWait(browser, timeout=2).until(
-        EC.visibility_of_element_located(
-            (By.CSS_SELECTOR, "#carousel-banner-0.carousel")
-        )
-    )
-    WebDriverWait(browser, timeout=2).until(
-        EC.visibility_of_element_located((By.CSS_SELECTOR, ".row-cols-xl-4"))
-    )
-    WebDriverWait(browser, timeout=2).until(
-        EC.visibility_of_element_located(
-            (By.CSS_SELECTOR, "#carousel-banner-1.carousel")
-        )
-    )
+    home_page = HomePage(browser)
+    home_page.open_home_page()
+    home_page.get_opencart_image()
+    home_page.get_menu()
+    home_page.get_carousel_banner_0()
+    home_page.get_products()
+    home_page.get_carousel_banner_1()
 
 
 def test_catalog(browser):
-    browser.get(browser.url + "/en-gb/catalog/desktops")
-    WebDriverWait(browser, timeout=2).until(
-        EC.visibility_of_element_located(
-            (By.XPATH, '//div[@id="content"]/h2[contains(text(), "Desktop")]')
-        )
-    )
-    browser.get(browser.url + "/en-gb/catalog/laptop-notebook")
-    WebDriverWait(browser, timeout=2).until(
-        EC.visibility_of_element_located(
-            (
-                By.XPATH,
-                '//div[@id="content"]/h2[contains(text(), "Laptops & Notebooks")]',
-            )
-        )
-    )
-    browser.get(browser.url + "/en-gb/catalog/component")
-    WebDriverWait(browser, timeout=2).until(
-        EC.visibility_of_element_located(
-            (By.XPATH, '//div[@id="content"]/h2[contains(text(), "Components")]')
-        )
-    )
-    browser.get(browser.url + "/en-gb/catalog/tablet")
-    WebDriverWait(browser, timeout=2).until(
-        EC.visibility_of_element_located(
-            (By.XPATH, '//div[@id="content"]/h2[contains(text(), "Tablets")]')
-        )
-    )
-    browser.get(browser.url + "/en-gb/catalog/software")
-    WebDriverWait(browser, timeout=2).until(
-        EC.visibility_of_element_located(
-            (By.XPATH, '//div[@id="content"]/h2[contains(text(), "Software")]')
-        )
-    )
+    catalog = CatalogPage(browser)
+    catalog.open_desktops_page()
+    catalog.get_desktops_title()
+
+    catalog.open_laptops_and_notebooks_page()
+    catalog.get_laptops_and_notebooks_title()
+
+    catalog.open_components_page()
+    catalog.get_components_title()
+
+    catalog.open_tablets_page()
+    catalog.get_tablets_title()
+
+    catalog.open_software_page()
+    catalog.get_software_title()
 
 
 def test_shopping_cart(browser):
-    browser.get(browser.url + "/en-gb?route=checkout/cart")
-    WebDriverWait(browser, timeout=2).until(
-        EC.visibility_of_element_located((By.CSS_SELECTOR, 'img[title="Your Store"]'))
-    )
-    WebDriverWait(browser, timeout=2).until(
-        EC.visibility_of_element_located((By.CSS_SELECTOR, "#menu"))
-    )
-    WebDriverWait(browser, timeout=2).until(
-        EC.visibility_of_element_located(
-            (By.XPATH, '//div[@id="content"]/h1[contains(text(), "Shopping Cart")]')
-        )
-    )
-    WebDriverWait(browser, timeout=2).until(
-        EC.visibility_of_element_located(
-            (
-                By.XPATH,
-                '//div[@id="content"]/p[contains(text(), '
-                '"Your shopping cart is empty!")]',
-            )
-        )
-    )
-    WebDriverWait(browser, timeout=2).until(
-        EC.visibility_of_element_located(
-            (By.XPATH, '//a[contains(@class, "btn")][contains(text(), "Continue")]')
-        )
-    )
+    shopping_cart_page = ShoppingCartPage(browser)
+    shopping_cart_page.open_shopping_cart_page()
+    shopping_cart_page.get_opencart_image()
+    shopping_cart_page.get_menu()
+    shopping_cart_page.get_shopping_cart_title()
+    shopping_cart_page.get_empty_shopping_cart_title()
+    shopping_cart_page.get_continue_button()
 
 
-def test_administration(browser):
-    browser.get(browser.url + "/administration")
-    WebDriverWait(browser, timeout=2).until(
-        EC.visibility_of_element_located((By.CSS_SELECTOR, 'img[title="OpenCart"]'))
-    )
-    WebDriverWait(browser, timeout=2).until(
-        EC.visibility_of_element_located((By.CSS_SELECTOR, ".card"))
-    )
-    WebDriverWait(browser, timeout=2).until(
-        EC.visibility_of_element_located((By.CSS_SELECTOR, "input[name=username]"))
-    )
-    WebDriverWait(browser, timeout=2).until(
-        EC.visibility_of_element_located((By.CSS_SELECTOR, "input[name=password]"))
-    )
-    WebDriverWait(browser, timeout=2).until(
-        EC.visibility_of_element_located((By.CSS_SELECTOR, "button[type=submit]"))
-    )
+def test_administration_page(browser):
+    admin_page = AdminPage(browser)
+    admin_page.open_admin_page()
+    admin_page.get_opencart_image()
+    admin_page.get_login_form()
+    admin_page.get_username_input()
+    admin_page.get_password_input()
+    admin_page.get_submit_button()
 
 
 def test_registration_page(browser):
-    browser.get(browser.url + "/index.php?route=account/register")
-    WebDriverWait(browser, timeout=2).until(
-        EC.visibility_of_element_located((By.CSS_SELECTOR, "input[name=firstname]"))
-    )
-    WebDriverWait(browser, timeout=2).until(
-        EC.visibility_of_element_located((By.CSS_SELECTOR, "input[name=lastname]"))
-    )
-    WebDriverWait(browser, timeout=2).until(
-        EC.visibility_of_element_located((By.CSS_SELECTOR, "input[name=email]"))
-    )
-    WebDriverWait(browser, timeout=2).until(
-        EC.visibility_of_element_located((By.CSS_SELECTOR, "input[name=password]"))
-    )
-    WebDriverWait(browser, timeout=2).until(
-        EC.visibility_of_element_located((By.CSS_SELECTOR, "button[type=submit]"))
-    )
+    registration_page = RegistrationPage(browser)
+    registration_page.open_registration_page()
+    registration_page.get_first_name_input()
+    registration_page.get_last_name_input()
+    registration_page.get_email_input()
+    registration_page.get_password_input()
+    registration_page.get_submit_button()

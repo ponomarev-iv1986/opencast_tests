@@ -1,6 +1,14 @@
+import allure
+from allure_commons.types import Severity
 from faker import Faker
 
 
+@allure.title("Проверка добавления продукта")
+@allure.severity(Severity.CRITICAL)
+@allure.tag("TEST", "REGRESS")
+@allure.label("owner", "IV_Ponomarev")
+@allure.suite("Administration page")
+@allure.parent_suite("Opencart")
 def test_add_product(login_admin_page):
     fake = Faker()
     login_admin_page.click_menu_catalog()
@@ -16,6 +24,12 @@ def test_add_product(login_admin_page):
     login_admin_page.alert_element.have_text("Success: You have modified products!")
 
 
+@allure.title("Проверка удаления продукта")
+@allure.severity(Severity.CRITICAL)
+@allure.tag("TEST", "REGRESS")
+@allure.label("owner", "IV_Ponomarev")
+@allure.suite("Administration page")
+@allure.parent_suite("Opencart")
 def test_remove_product(login_admin_page):
     login_admin_page.click_menu_catalog()
     login_admin_page.click_catalog_products()

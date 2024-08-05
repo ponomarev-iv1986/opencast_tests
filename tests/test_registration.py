@@ -1,8 +1,16 @@
+import allure
+from allure_commons.types import Severity
 from faker import Faker
 
 from pages.registration_page import RegistrationPage
 
 
+@allure.title("Проверка регистрации пользователя")
+@allure.severity(Severity.CRITICAL)
+@allure.tag("TEST", "REGRESS")
+@allure.label("owner", "IV_Ponomarev")
+@allure.suite("Registration page")
+@allure.parent_suite("Opencart")
 def test_user_registration(browser):
     registration_page = RegistrationPage(browser)
     fake = Faker()

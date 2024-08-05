@@ -1,3 +1,6 @@
+import allure
+from allure_commons.types import Severity
+
 from pages.admin_page import AdminPage
 from pages.catalog_page import CatalogPage
 from pages.home_page import HomePage
@@ -5,6 +8,12 @@ from pages.registration_page import RegistrationPage
 from pages.shopping_cart_page import ShoppingCartPage
 
 
+@allure.title("Проверка элементов главной страницы")
+@allure.severity(Severity.NORMAL)
+@allure.tag("TEST", "REGRESS")
+@allure.label("owner", "IV_Ponomarev")
+@allure.suite("Home page")
+@allure.parent_suite("Opencart")
 def test_homepage(browser):
     home_page = HomePage(browser)
     home_page.open_home_page()
@@ -15,6 +24,12 @@ def test_homepage(browser):
     home_page.get_carousel_banner_1()
 
 
+@allure.title("Проверка элементов каталога")
+@allure.severity(Severity.NORMAL)
+@allure.tag("TEST", "REGRESS")
+@allure.label("owner", "IV_Ponomarev")
+@allure.suite("Catalog")
+@allure.parent_suite("Opencart")
 def test_catalog(browser):
     catalog = CatalogPage(browser)
     catalog.open_desktops_page()
@@ -33,6 +48,12 @@ def test_catalog(browser):
     catalog.get_software_title()
 
 
+@allure.title("Проверка элементов корзины")
+@allure.severity(Severity.NORMAL)
+@allure.tag("TEST", "REGRESS")
+@allure.label("owner", "IV_Ponomarev")
+@allure.suite("Shopping cart")
+@allure.parent_suite("Opencart")
 def test_shopping_cart(browser):
     shopping_cart_page = ShoppingCartPage(browser)
     shopping_cart_page.open_shopping_cart_page()
@@ -43,6 +64,12 @@ def test_shopping_cart(browser):
     shopping_cart_page.get_continue_button()
 
 
+@allure.title("Проверка элементов страницы администрирования")
+@allure.severity(Severity.NORMAL)
+@allure.tag("TEST", "REGRESS")
+@allure.label("owner", "IV_Ponomarev")
+@allure.suite("Administration page")
+@allure.parent_suite("Opencart")
 def test_administration_page(browser):
     admin_page = AdminPage(browser)
     admin_page.open_admin_page()
@@ -53,6 +80,12 @@ def test_administration_page(browser):
     admin_page.get_submit_button()
 
 
+@allure.title("Проверка элементов страницы регистрации")
+@allure.severity(Severity.NORMAL)
+@allure.tag("TEST", "REGRESS")
+@allure.label("owner", "IV_Ponomarev")
+@allure.suite("Registration page")
+@allure.parent_suite("Opencart")
 def test_registration_page(browser):
     registration_page = RegistrationPage(browser)
     registration_page.open_registration_page()

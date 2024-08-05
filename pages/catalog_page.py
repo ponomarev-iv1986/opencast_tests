@@ -23,7 +23,7 @@ class CatalogPage(BasePage):
     )
     SOFTWARE_CONTENT_TITLE = (
         By.XPATH,
-        "//div[@id='content']/h2[contains(text(), 'Softwares')]",
+        "//div[@id='content']/h2[contains(text(), 'Software')]",
     )
 
     @allure.step("Открываем страницу с компьютерами")

@@ -1,5 +1,10 @@
+import os
+
+import dotenv
 import pytest
 from selenium import webdriver
+
+from pages.admin_page import AdminPage
 
 
 def pytest_addoption(parser):
@@ -25,3 +30,15 @@ def browser(request):
     yield driver
 
     driver.quit()
+
+
+@pytest.fixture()
+def login_admin_page(browser):
+    dotenv.load_dotenv()
+    admin_page = AdminPage(browser)
+    admin_page.open_admin_page()
+    admin_page.fill_username(os.getenv("LOGIN"))
+    admin_page.fill_password(os.getenv("PASSWORD"))
+    admin_page.submit()
+
+    return admin_page

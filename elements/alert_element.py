@@ -1,3 +1,4 @@
+import allure
 from selenium.common import TimeoutException
 from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.common.by import By
@@ -11,6 +12,7 @@ class AlertElement:
     def __init__(self, browser: WebDriver):
         self.browser = browser
 
+    @allure.step("Проверяем, что в аллерте есть текст {value}")
     def have_text(self, value: str):
         try:
             WebDriverWait(self.browser, timeout=3).until(

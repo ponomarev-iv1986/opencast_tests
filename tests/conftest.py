@@ -5,13 +5,19 @@ import allure
 import dotenv
 import pytest
 from selenium import webdriver
+from selenium.webdriver import ChromeOptions, FirefoxOptions
 
 from pages.admin_page import AdminPage
 
 
 def pytest_addoption(parser):
     parser.addoption("--browser", action="store", default="chrome")
-    parser.addoption("--url", action="store", default="http://127.0.0.1:8080")
+    parser.addoption("--url", action="store", default="http://192.168.3.107:8081")
+    parser.addoption("--remote", action="store_true")
+    parser.addoption("--executor", action="store", default="127.0.0.1")
+    parser.addoption("--bv", action="store", default="127.0")
+    parser.addoption("--vnc", action="store_true")
+    parser.addoption("--video", action="store_true")
 
 
 @pytest.hookimpl(tryfirst=True, hookwrapper=True)
@@ -28,13 +34,46 @@ def pytest_runtest_makereport(item, call):
 def browser(request):
     browser_name = request.config.getoption("--browser")
     url = request.config.getoption("--url")
+    remote = request.config.getoption("--remote")
+    executor = request.config.getoption("--executor")
+    browser_version = request.config.getoption("--bv")
+    vnc = request.config.getoption("--vnc")
+    video = request.config.getoption("--video")
 
-    if browser_name == "chrome":
-        driver = webdriver.Chrome()
-    elif browser_name == "firefox":
-        driver = webdriver.Firefox()
+    if remote:
+        executor_url = f"http://{executor}:4444/wd/hub"
+        if browser_name == "chrome":
+            options = ChromeOptions()
+        elif browser_name == "firefox":
+            options = FirefoxOptions()
+        else:
+            raise ValueError('Поддерживаются только браузеры "chrome" и "firefox"')
+        capabilities = {
+            "browserName": browser_name,
+            "browserVersion": browser_version,
+            "selenoid:options": {
+                "enableVNC": vnc,
+                "name": request.node.name,
+                "screenResolution": "1920x1080",
+                "enableVideo": video,
+                "timeZone": "Europe/Moscow",
+                "env": ["LANG=ru_RU.UTF-8", "LANGUAGE=ru:en", "LC_ALL=ru_RU.UTF-8"],
+            },
+            "acceptInsecureCerts": True,
+        }
+        options.capabilities.update(capabilities)
+        driver = webdriver.Remote(
+            command_executor=executor_url,
+            options=options,
+        )
     else:
-        raise ValueError('Поддерживаются только браузеры "chrome" и "firefox"')
+        if browser_name == "chrome":
+            driver = webdriver.Chrome()
+        elif browser_name == "firefox":
+            driver = webdriver.Firefox()
+        else:
+            raise ValueError('Поддерживаются только браузеры "chrome" и "firefox"')
+        driver.maximize_window()
 
     allure.attach(
         name=driver.session_id,
@@ -42,7 +81,6 @@ def browser(request):
         attachment_type=allure.attachment_type.JSON,
     )
 
-    driver.maximize_window()
     driver.url = url
 
     yield driver
